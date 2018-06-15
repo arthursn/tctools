@@ -138,7 +138,7 @@ def load_table(fname, sort=None, fill=None, ignorephaseregions=''):
                 if c not in columns:
                     columns.append(c)
 
-    df = pd.concat(newdflist, sort=False)[columns]
+    df = pd.concat(newdflist)[columns]
 
     if isinstance(fill, (int, float)):
         df = df.fillna(fill)
