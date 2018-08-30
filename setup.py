@@ -9,6 +9,6 @@ setup(
     url='https://github.com/arthursn/tctools',
     packages=['tctools'],
     install_requires=['numpy', 'matplotlib', 'scipy',
-                      'pandas', 'periodictable'],
+                      'pandas', 'periodictable', 'openpyxl'],
     long_description=open('README.md').read(),
 )
