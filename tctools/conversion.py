@@ -6,17 +6,24 @@ from scipy.linalg import solve
 
 
 class System(object):
-    def __init__(self, majorelement, x={}, w={}):
-        self.x = x
-        self.w = w
+    def __init__(self, majorelement, x=None, w=None):
+        if x is None:
+            self.x = dict()
+        else:
+            self.x = x
+
+        if w is None:
+            self.w = dict()
+        else:
+            self.w = w
 
         self.major = majorelement
         self.M = None
 
         try:
             self.Mi = {self.major: elements.symbol(self.major).mass}
-            self.Mi.update({el: elements.symbol(el).mass for el in x.keys()})
-            self.Mi.update({el: elements.symbol(el).mass for el in w.keys()})
+            self.Mi.update({el: elements.symbol(el).mass for el in self.x.keys()})
+            self.Mi.update({el: elements.symbol(el).mass for el in self.w.keys()})
         except:
             raise
 
