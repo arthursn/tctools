@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from builtins import open
-from collections import OrderedDict
-
-import numpy as np
-import pandas as pd
 from fnmatch import fnmatch
+import pandas as pd
+import numpy as np
+from collections import OrderedDict
+import sys
+if sys.version_info[0] <= 2:
+    from codecs import open
 
 
 def _isfloat(x):
@@ -41,7 +42,7 @@ def load_table_blocks(fname):
 
         for line in f:
             # removes leading and trailing chars ' ', '\t', '\n', and ','
-            line = line.strip(' \t\n,')
+            line = line.strip()
 
             if 'Phase Region for' in line:
                 # new phase region
