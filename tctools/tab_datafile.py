@@ -43,6 +43,7 @@ def load_table_blocks(fname):
         for line in f:
             # removes leading and trailing chars ' ', '\t', '\n', and ','
             line = line.strip()
+            line = line.strip(',')
 
             if 'Phase Region for' in line:
                 # new phase region
