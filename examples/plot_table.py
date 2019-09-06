@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-import sys
-sys.path.insert(1, "/home/arthur/Dropbox/python")
 from tctools import *
 
 df = load_table('NP_EUROFER.DAT', sort='T', fill=0)

@@ -1,9 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-import sys
-sys.path.insert(1, '/home/arthur/Dropbox/python')
-
 from tctools import *
 
 # fname = 'FE-C.EXP'
