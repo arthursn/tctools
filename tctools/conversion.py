@@ -27,7 +27,7 @@ class System(object):
         except:
             raise
 
-    def solve(self):
+    def solve_numerically(self):
         if set(self.x.keys()) != set(self.w.keys()):
             A = np.ndarray((2, 2))
             B = np.ndarray(2)
@@ -48,23 +48,41 @@ class System(object):
             else:
                 self.M = X[0]
                 self.x[self.major] = X[1]
-                
+
                 x = {el: w*self.M/self.Mi[el] for el, w in self.w.items()}
                 w = {el: x*self.Mi[el]/self.M for el, x in self.x.items()}
 
                 self.x.update(x)
                 self.w.update(w)
 
+    def solve(self):
+        if set(self.x.keys()) != set(self.w.keys()):
+            num = self.Mi[self.major] - sum([(self.Mi[self.major] - self.Mi[el])*x for el, x in self.x.items()])
+            den = 1 + sum([(self.Mi[self.major]/self.Mi[el] - 1.)*w for el, w in self.w.items()])
+            self.M = num/den
+            self.x[self.major] = 1. - sum([x for el, x in self.x.items()]) - \
+                sum([w/self.Mi[el] for el, w in self.w.items()])*self.M
+
+            x = {el: w*self.M/self.Mi[el] for el, w in self.w.items()}
+            w = {el: x*self.Mi[el]/self.M for el, x in self.x.items()}
+
+            self.x.update(x)
+            self.w.update(w)
+
 
 if __name__ == '__main__':
     x = dict(Mn=1e-1, Si=1e-1)
     w = dict(C=.5e-2, Cr=1e-1)
-    
+
     print(x)
     print(w)
-    
+
     alloy = System('Fe', x, w)
+
+    alloy.solve_numerically()
+    print(alloy.x)
+    print(alloy.w)
+
     alloy.solve()
-    
     print(alloy.x)
     print(alloy.w)
