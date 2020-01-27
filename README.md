@@ -1,6 +1,6 @@
 # tctools
 
-Python tools for manipulation of Thermo-Calc&reg; output data.
+Python tools for parsing and manipulating Thermo-Calc&reg; output data.
 
 # Installation and requirements
 
