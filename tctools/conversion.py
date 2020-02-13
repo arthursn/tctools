@@ -88,6 +88,62 @@ class System(object):
             self.w.update(w)
 
 
+def x2w(majorelement, **x):
+    """
+    Convert from atomic fraction to mass fraction
+
+    Parameters
+    ----------
+    majorelement : string
+        Alloy's major element. Its atomic fraction is accounted by balance.
+    **x : float
+        Atomic fractions of the alloying elements. Arguments are passed
+        using the respective element symbol.
+
+    Returns
+    -------
+    w : dict
+        A dictionary mapping the element symbols with their respective mass
+        fractions.
+
+    Examples
+    --------
+    >>> x2w('Fe', C=0.1e-2, Mn=1e-2)
+    {'C': 0.00021527601255736222, 'Mn': 0.009846923265422481, 'Fe': 0.9899378007220201}
+    """
+    alloy = System(majorelement, x=x)
+    alloy.solve()
+    return alloy.w
+
+
+def w2x(majorelement, **w):
+    """
+    Convert from mass fraction to atomic fraction
+
+    Parameters
+    ----------
+    majorelement : string
+        Alloy's major element. Its mass fraction is accounted by balance.
+    **w : float
+        Mass fractions of the alloying elements. Arguments are passed
+        using the respective element symbol.
+
+    Returns
+    -------
+    x : dict
+        A dictionary mapping the element symbols with their respective
+        atomic fractions.
+
+    Examples
+    --------
+    >>> w2x('Fe', C=0.1e-2, Mn=1e-2)
+    {'Fe': 0.9852416084572564, 'C': 0.004631934706913255, 'Mn': 0.010126456835830308}
+    """
+    alloy = System(majorelement, w=w)
+    alloy.solve()
+    return alloy.x
+
+
 if __name__ == '__main__':
     x = dict(Mn=1e-1, Si=1e-1)
     w = dict(C=.5e-2, Cr=1e-1, Fe=.8)
