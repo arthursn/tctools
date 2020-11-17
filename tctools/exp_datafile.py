@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+__all__ = ['load_exp_datafile', 'plot_exp_datafile']
+
 
 def load_exp_datafile(fname, blocks=False):
     """
