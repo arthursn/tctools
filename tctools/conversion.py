@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 from periodictable import elements
-from scipy.linalg import solve
 
 
 class System(object):
@@ -30,44 +28,9 @@ class System(object):
             self.w.pop(self.major)
 
         # Load molar masses of alloy elements
-        try:
-            self.Mi = {self.major: elements.symbol(self.major).mass}
-            self.Mi.update({el: elements.symbol(el).mass for el in self.x.keys()})
-            self.Mi.update({el: elements.symbol(el).mass for el in self.w.keys()})
-        except:
-            raise
-
-    def solve_numerically(self):
-        """
-        Numerically solve system of equations for converting between mass
-        and atomic composition bases.
-        """
-        if set(self.x.keys()) != set(self.w.keys()):
-            A = np.ndarray((2, 2))
-            B = np.ndarray(2)
-
-            A[0, 0] = sum([w/self.Mi[el] for el, w in self.w.items()])
-            A[0, 1] = 1.
-            A[1, 0] = sum([w for el, w in self.w.items()]) - 1.
-            A[1, 1] = self.Mi[self.major]
-
-            B[0] = 1. - sum([x for el, x in self.x.items()])
-            B[1] = -sum([x*self.Mi[el] for el, x in self.x.items()])
-
-            try:
-                X = solve(A, B)
-            except:
-                print('Cannot solve system')
-                raise
-            else:
-                self.M = X[0]
-                self.x[self.major] = X[1]
-
-                x = {el: w*self.M/self.Mi[el] for el, w in self.w.items()}
-                w = {el: x*self.Mi[el]/self.M for el, x in self.x.items()}
-
-                self.x.update(x)
-                self.w.update(w)
+        self.Mi = {self.major: elements.symbol(self.major).mass}
+        self.Mi.update({el: elements.symbol(el).mass for el in self.x.keys()})
+        self.Mi.update({el: elements.symbol(el).mass for el in self.w.keys()})
 
     def solve(self):
         """
@@ -75,7 +38,8 @@ class System(object):
         composition bases.
         """
         if set(self.x.keys()) != set(self.w.keys()):
-            num = self.Mi[self.major] - sum([(self.Mi[self.major] - self.Mi[el])*x for el, x in self.x.items()])
+            num = self.Mi[self.major] - \
+                sum([(self.Mi[self.major] - self.Mi[el])*x for el, x in self.x.items()])
             den = 1 + sum([(self.Mi[self.major]/self.Mi[el] - 1.)*w for el, w in self.w.items()])
             self.M = num/den
             self.x[self.major] = 1. - sum([x for el, x in self.x.items()]) - \
@@ -154,12 +118,7 @@ if __name__ == '__main__':
 
     alloy = System('Fe', x, w)
 
-    alloy.solve_numerically()
-    print('Compositions solved numerically:')
-    print('at. fraction:', alloy.x)
-    print('wt. fraction:', alloy.w, '\n')
-
     alloy.solve()
-    print('Compositions solved analytically:')
+    print('Converted compositions:')
     print('at. fraction:', alloy.x)
     print('wt. fraction:', alloy.w)
